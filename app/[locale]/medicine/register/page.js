@@ -83,7 +83,7 @@ function RegisterMedicineForm({ params }) {
     e.preventDefault();
     
     if (!formData.pharmacyId) {
-      alert(locale === 'ar' ? 'يرجى اختيار الشركة' : 'Please select a company');
+      alert(locale === 'ar' ? 'يرجى اختيار المكتب العلمي' : 'Please select a scientific office');
       return;
     }
 
@@ -131,9 +131,10 @@ function RegisterMedicineForm({ params }) {
         </div>
 
         <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8 space-y-6 border border-gray-100 dark:border-gray-700">
+          {/* First Input: Scientific Office (مكتب علمي) */}
           <div>
             <label htmlFor="pharmacyId" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              {t.medicine.selectPharmacy}
+              {locale === 'ar' ? 'المكتب العلمي' : 'Scientific Office'}
             </label>
             <select
               id="pharmacyId"
@@ -143,7 +144,7 @@ function RegisterMedicineForm({ params }) {
               required
               className="w-full px-4 py-3 border-2 border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white shadow-sm transition-all"
             >
-              <option value="">{locale === 'ar' ? '-- اختر الشركة --' : '-- Select Company --'}</option>
+              <option value="">{locale === 'ar' ? '-- اختر المكتب العلمي --' : '-- Select Scientific Office --'}</option>
               {pharmacies.map((pharmacy) => (
                 <option key={pharmacy.id} value={pharmacy.id}>
                   {pharmacy.name}
@@ -152,6 +153,7 @@ function RegisterMedicineForm({ params }) {
             </select>
           </div>
 
+          {/* Second Input: Medicine Name */}
           <div className="relative">
             <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
               {t.medicine.name}
@@ -185,9 +187,10 @@ function RegisterMedicineForm({ params }) {
             )}
           </div>
 
+          {/* Third Input: Pharmaceutical Company */}
           <div>
             <label htmlFor="company" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-              {t.medicine.company}
+              {locale === 'ar' ? 'الشركة المصنعة' : 'Pharmaceutical Company'}
             </label>
             <select
               id="company"
@@ -197,7 +200,7 @@ function RegisterMedicineForm({ params }) {
               required
               className="w-full px-4 py-3 border-2 border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white shadow-sm transition-all"
             >
-              <option value="">{locale === 'ar' ? '-- اختر الشركة --' : '-- Select Company --'}</option>
+              <option value="">{locale === 'ar' ? '-- اختر الشركة المصنعة --' : '-- Select Pharmaceutical Company --'}</option>
               {pharmaceuticalCompanies.map((company, index) => (
                 <option key={index} value={company}>
                   {company}

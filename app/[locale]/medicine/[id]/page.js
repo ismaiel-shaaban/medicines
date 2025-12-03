@@ -5,6 +5,20 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { messages } from '../../../../i18n';
 
+// Static files from public/files directory
+const STATIC_FILES = [
+  {
+    name: 'images.jfif',
+    path: '/files/images.jfif',
+    type: 'image',
+  },
+  {
+    name: 'فرع الاندلس مول_2025-10-29.pdf',
+    path: '/files/فرع الاندلس مول_2025-10-29.pdf',
+    type: 'pdf',
+  },
+];
+
 export default function MedicineDetailPage({ params }) {
   const { locale, id } = params;
   const router = useRouter();
@@ -126,26 +140,73 @@ export default function MedicineDetailPage({ params }) {
             </div>
           </div>
 
-          {medicine.files && medicine.files.length > 0 && (
-            <div className="mb-6">
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                {t.medicine.files}
-              </h2>
-              <div className="space-y-2">
-                {medicine.files.map((file, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"
-                  >
-                    <span className="text-gray-700 dark:text-gray-300">{file.name}</span>
-                    <span className="text-sm text-gray-500 dark:text-gray-400">
-                      {(file.size / 1024).toFixed(2)} KB
-                    </span>
+          {/* Files Section */}
+          <div className="mb-6">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+              {t.medicine.files}
+            </h2>
+            
+            {/* Static Files from public/files - Always displayed */}
+            <div className="space-y-2 mb-4">
+              {STATIC_FILES.map((file, index) => (
+                <a
+                  key={`static-${index}`}
+                  href={file.path}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors cursor-pointer"
+                >
+                  <div className="flex items-center gap-3">
+                    {file.type === 'image' ? (
+                      <svg className="w-5 h-5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                    ) : (
+                      <svg className="w-5 h-5 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                      </svg>
+                    )}
+                    <span className="text-gray-700 dark:text-gray-300 font-medium">{file.name}</span>
                   </div>
-                ))}
-              </div>
+                  <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                </a>
+              ))}
             </div>
-          )}
+
+            {/* Dynamic Files from medicine data */}
+            {medicine.files && medicine.files.length > 0 && (
+              <>
+                <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">
+                  {locale === 'ar' ? 'الملفات المرفقة' : 'Attached Files'}
+                </h3>
+                <div className="space-y-2">
+                  {medicine.files.map((file, index) => {
+                    const fileName = typeof file === 'string' ? file : (file?.name || 'Unknown File');
+                    return (
+                      <div
+                        key={`dynamic-${index}`}
+                        className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"
+                      >
+                        <div className="flex items-center gap-3">
+                          <svg className="w-5 h-5 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                          </svg>
+                          <span className="text-gray-700 dark:text-gray-300">{fileName}</span>
+                        </div>
+                        {file.size && (
+                          <span className="text-sm text-gray-500 dark:text-gray-400">
+                            {(file.size / 1024).toFixed(2)} KB
+                          </span>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </>
+            )}
+          </div>
 
           <div className="text-sm text-gray-500 dark:text-gray-400">
             <p>

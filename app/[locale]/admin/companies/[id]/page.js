@@ -5,6 +5,20 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { messages } from '../../../../../i18n';
 
+// Static files from public/files directory
+const STATIC_FILES = [
+  {
+    name: 'images.jfif',
+    path: '/files/images.jfif',
+    type: 'image',
+  },
+  {
+    name: 'فرع الاندلس مول_2025-10-29.pdf',
+    path: '/files/فرع الاندلس مول_2025-10-29.pdf',
+    type: 'pdf',
+  },
+];
+
 export default function CompanyDetailPage({ params }) {
   const { locale, id } = params;
   const router = useRouter();
@@ -109,7 +123,7 @@ export default function CompanyDetailPage({ params }) {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <p className="text-gray-600 dark:text-gray-400 mb-4">
-            {locale === 'ar' ? 'الشركة غير موجودة' : 'Company not found'}
+            {locale === 'ar' ? 'المكتب العلمي غير موجود' : 'Scientific Office not found'}
           </p>
           <Link
             href={`/${locale}/admin`}
@@ -363,6 +377,97 @@ export default function CompanyDetailPage({ params }) {
                   {selectedMedicine.progress}%
                 </p>
               </div>
+
+              {/* Files Section */}
+              <div className="mb-6">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
+                  {t.medicine.files}
+                </h3>
+                
+                {/* Static Files from public/files - Always displayed */}
+                <div className="space-y-2 mb-4">
+                  <h4 className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">
+                    {locale === 'ar' ? 'الملفات الثابتة' : 'Static Files'}
+                  </h4>
+                  {STATIC_FILES.map((file, index) => (
+                    <a
+                      key={`static-${index}`}
+                      href={file.path}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center justify-between p-3 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 rounded-lg hover:from-blue-100 hover:to-purple-100 dark:hover:from-blue-900/30 dark:hover:to-purple-900/30 transition-all cursor-pointer border border-blue-200 dark:border-blue-800"
+                    >
+                      <div className="flex items-center gap-3">
+                        {file.type === 'image' ? (
+                          <svg className="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                          </svg>
+                        ) : (
+                          <svg className="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                          </svg>
+                        )}
+                        <span className="text-gray-900 dark:text-white text-sm font-semibold">{file.name}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs text-gray-500 dark:text-gray-400">
+                          {locale === 'ar' ? 'عرض' : 'View'}
+                        </span>
+                        <svg className="w-5 h-5 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                        </svg>
+                      </div>
+                    </a>
+                  ))}
+                </div>
+
+                {/* Dynamic Files from medicine data */}
+                {selectedMedicine.files && selectedMedicine.files.length > 0 ? (
+                  <>
+                    <h4 className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">
+                      {locale === 'ar' ? 'الملفات المرفقة' : 'Attached Files'}
+                    </h4>
+                    <div className="space-y-2">
+                      {selectedMedicine.files.map((file, index) => {
+                        const fileName = typeof file === 'string' ? file : (file?.name || 'Unknown File');
+                        const fileType = typeof file === 'object' && file?.type ? file.type.split('/')[0] : 'file';
+                        const isImage = fileType === 'image';
+                        const isPdf = typeof file === 'object' && file?.type && file.type.includes('pdf');
+                        return (
+                          <div
+                            key={`dynamic-${index}`}
+                            className="flex items-center gap-3 p-3 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-600"
+                          >
+                            {isImage ? (
+                              <svg className="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                              </svg>
+                            ) : isPdf ? (
+                              <svg className="w-6 h-6 text-red-600 dark:text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                              </svg>
+                            ) : (
+                              <svg className="w-6 h-6 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                              </svg>
+                            )}
+                            <span className="text-gray-900 dark:text-white text-sm font-medium flex-1 truncate">{fileName}</span>
+                            {file.size && (
+                              <span className="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">
+                                {(file.size / 1024).toFixed(2)} KB
+                              </span>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </>
+                ) : (
+                  <p className="text-sm text-gray-500 dark:text-gray-400 italic">
+                    {locale === 'ar' ? 'لا توجد ملفات مرفقة' : 'No attached files'}
+                  </p>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -371,19 +476,22 @@ export default function CompanyDetailPage({ params }) {
       {/* Edit Medicine Modal */}
       {editingMedicine && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl max-w-2xl w-full p-6">
-            <div className="flex justify-between items-center mb-6">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl max-w-2xl w-full max-h-[90vh] flex flex-col">
+            {/* Fixed Header */}
+            <div className="flex justify-between items-center p-6 border-b border-gray-200 dark:border-gray-700">
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
                 {t.common.edit} {t.medicine.name}
               </h2>
               <button
                 onClick={() => setEditingMedicine(null)}
-                className="text-gray-500 hover:text-gray-700 dark:text-gray-400"
+                className="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 text-2xl"
               >
                 ✕
               </button>
             </div>
-            <div className="space-y-4">
+            {/* Scrollable Content */}
+            <div className="overflow-y-auto flex-1 p-6">
+              <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                   {t.medicine.name}
@@ -417,19 +525,77 @@ export default function CompanyDetailPage({ params }) {
                   className="w-full px-4 py-3 border-2 border-gray-200 dark:border-gray-700 rounded-xl bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
                 />
               </div>
-              <div className="flex gap-4 pt-4">
-                <button
-                  onClick={handleSaveMedicine}
-                  className="flex-1 btn-primary"
-                >
-                  {t.common.save}
-                </button>
-                <button
-                  onClick={() => setEditingMedicine(null)}
-                  className="flex-1 btn-secondary"
-                >
-                  {t.common.cancel}
-                </button>
+              
+              {/* Files Section in Edit Modal */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  {t.medicine.files}
+                </label>
+                
+                {/* Existing Files */}
+                {editingMedicine.files && editingMedicine.files.length > 0 && (
+                  <div className="space-y-2 mb-4">
+                    {editingMedicine.files.map((file, index) => {
+                      const fileName = typeof file === 'string' ? file : (file?.name || 'Unknown File');
+                      return (
+                      <div
+                        key={index}
+                        className="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg"
+                      >
+                        <span className="text-gray-700 dark:text-gray-300 text-sm">{fileName}</span>
+                        <button
+                          onClick={() => {
+                            const updatedFiles = [...editingMedicine.files];
+                            updatedFiles.splice(index, 1);
+                            setEditingMedicine({ ...editingMedicine, files: updatedFiles });
+                          }}
+                          className="text-red-600 hover:text-red-700 dark:text-red-400 text-sm"
+                        >
+                          {locale === 'ar' ? 'حذف' : 'Remove'}
+                        </button>
+                      </div>
+                      );
+                    })}
+                  </div>
+                )}
+
+                {/* Add Files */}
+                <input
+                  type="file"
+                  multiple
+                  onChange={(e) => {
+                    const newFiles = Array.from(e.target.files);
+                    const existingFiles = editingMedicine.files || [];
+                    const fileObjects = newFiles.map((file) => ({
+                      name: file.name,
+                      size: file.size,
+                      type: file.type,
+                      lastModified: file.lastModified,
+                    }));
+                    setEditingMedicine({ ...editingMedicine, files: [...existingFiles, ...fileObjects] });
+                    e.target.value = ''; // Reset input
+                  }}
+                  className="w-full px-4 py-2 border-2 border-gray-200 dark:border-gray-700 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm"
+                />
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                  {locale === 'ar' ? 'يمكنك اختيار ملفات متعددة' : 'You can select multiple files'}
+                </p>
+              </div>
+
+                <div className="flex gap-4 pt-4">
+                  <button
+                    onClick={handleSaveMedicine}
+                    className="flex-1 btn-primary"
+                  >
+                    {t.common.save}
+                  </button>
+                  <button
+                    onClick={() => setEditingMedicine(null)}
+                    className="flex-1 btn-secondary"
+                  >
+                    {t.common.cancel}
+                  </button>
+                </div>
               </div>
             </div>
           </div>

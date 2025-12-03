@@ -23,7 +23,7 @@ export default function PharmaciesPage({ params }) {
       const samplePharmacies = [
         {
           id: '1',
-          name: 'شركة النور للأدوية',
+          name: 'المكتب العلمي للنور',
           ownerName: 'أحمد محمد',
           licenseNumber: 'PH-2024-001',
           address: 'شارع الرشيد، بغداد',
@@ -33,7 +33,7 @@ export default function PharmaciesPage({ params }) {
         },
         {
           id: '2',
-          name: 'شركة الشفاء للأدوية',
+          name: 'المكتب العلمي للشفاء',
           ownerName: 'فاطمة علي',
           licenseNumber: 'PH-2024-002',
           address: 'شارع الكرادة، بغداد',
@@ -43,7 +43,7 @@ export default function PharmaciesPage({ params }) {
         },
         {
           id: '3',
-          name: 'شركة الحياة للأدوية',
+          name: 'المكتب العلمي للحياة',
           ownerName: 'خالد حسن',
           licenseNumber: 'PH-2024-003',
           address: 'شارع المتنبي، بغداد',
@@ -86,7 +86,7 @@ export default function PharmaciesPage({ params }) {
               {t.pharmacy.title}
             </h1>
             <p className="text-gray-600 dark:text-gray-400 mt-2">
-              {locale === 'ar' ? 'إدارة شركات الأدوية' : 'Manage pharmaceutical companies'}
+              {locale === 'ar' ? 'إدارة المكاتب العلمية' : 'Manage scientific offices'}
             </p>
           </div>
           <Link
@@ -127,7 +127,7 @@ export default function PharmaciesPage({ params }) {
               </svg>
             </div>
             <p className="text-gray-600 dark:text-gray-400 mb-4 text-lg">
-              {locale === 'ar' ? 'لا توجد شركات' : 'No companies found'}
+              {locale === 'ar' ? 'لا توجد مكاتب علمية' : 'No scientific offices found'}
             </p>
             <Link
               href={`/${locale}/pharmacies/register`}

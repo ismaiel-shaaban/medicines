@@ -70,7 +70,7 @@ export default function RegisterPharmacyPage({ params }) {
             {t.pharmacy.addPharmacy}
           </h1>
           <p className="text-gray-600 dark:text-gray-400 mt-2">
-            {locale === 'ar' ? 'إضافة شركة أدوية جديدة إلى النظام' : 'Add a new pharmaceutical company to the system'}
+            {locale === 'ar' ? 'إضافة مكتب علمي جديد إلى النظام' : 'Add a new scientific office to the system'}
           </p>
         </div>
 
